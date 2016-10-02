@@ -1,6 +1,8 @@
 # PoGoNESTMap
 An automated mapping of specific Pokemon Go spawn points and times for NESTS based on data submitted from PGM users.
 
+See live version: http://www.manijuanas.com/
+
 Sample dataset provided in nestdb.sql.
 Sample percentage calculation in nestresume.sql.
 
