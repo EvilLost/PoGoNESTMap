@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>US PoGo NESTMap</title>
-		<style>
+		<style type="text/css">
 		html, body {
 			height: 100%;
 			margin: 0;
@@ -44,13 +44,14 @@
 			white-space: nowrap;
 			border-radius: 2px;
 		}
-		.pkid option  {
+		.pkid div  {
 		    padding-left: 40px;
 			margin-top: 0px;
 			background-size: 40px 40px;
 			background-repeat: no-repeat;
 			height: 20px;
-			padding-top: 10px;
+			/* padding-top: 10px; */
+			padding-top: 11px;
 		}
 		.sammich {
 		  padding-left: 2em;
@@ -105,9 +106,27 @@
 			background-color: slategray;
 			background-size:75px 100px;
 		}
-		#iconSizing{
+		#iconSizing {
 			
 		}
+        .unselectable {
+            -webkit-user-select:none;
+            -khtml-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+        }
+        .pokemon-selected {
+            background-color: #ccc !important;
+        }
+        .pkid {
+            background-color: #fff;
+            overflow-y: scroll;
+            border: 1px solid #7f7f7f;
+            width: calc(99% - 2px) !important;
+            font-family: 'Helvetica Neue', Helvetica, sans-serif;
+            font-size 13px;
+        }
 	 	</style>
 	</head>
 <script src="https://code.jquery.com/jquery-1.7.2.js"></script>
@@ -125,62 +144,62 @@
 	</div>
 	<input id="allselect" type="button" value="All" style="width:48.4%;"/>
 	<input id="noneselect" type="button" value="None" style="width:48.4%;"/>
-	<select id="pkid" class="pkid" multiple="multiple" style="height:78vh;width:99%;">
-		<option value="1" style="background-image: url(static/pokemon/newicons/1.png);">Bulbasaur - #1</option>
-		<option value="4" style="background-image: url(static/pokemon/newicons/4.png);">Charmander - #4</option>
-		<option value="7" style="background-image: url(static/pokemon/newicons/7.png);">Squirtle - #7</option>
-		<option value="10" style="background-image: url(static/pokemon/newicons/10.png);">Caterpie - #10</option>
-		<option value="13" style="background-image: url(static/pokemon/newicons/13.png);">Weedle - #13</option>
-		<option value="23" style="background-image: url(static/pokemon/newicons/23.png);">Ekans - #23</option>
-		<option value="25" style="background-image: url(static/pokemon/newicons/25.png);">Pikachu - #25</option>
-		<option value="27" style="background-image: url(static/pokemon/newicons/27.png);">Sandshrew - #27</option>
-		<option value="29" style="background-image: url(static/pokemon/newicons/29.png);">Nidoran♀ - #29</option>
-		<option value="32" style="background-image: url(static/pokemon/newicons/32.png);">Nidoran♂ - #32</option>
-		<option value="35" style="background-image: url(static/pokemon/newicons/35.png);">Clefairy - #35</option>
-		<option value="37" style="background-image: url(static/pokemon/newicons/37.png);">Vulpix - #37</option>
-		<option value="39" style="background-image: url(static/pokemon/newicons/39.png);">Jigglypuff - #39</option>
-		<option value="41" style="background-image: url(static/pokemon/newicons/41.png);">Zubat - #41</option>
-		<option value="43" style="background-image: url(static/pokemon/newicons/43.png);">Oddish - #43</option>
-		<option value="46" style="background-image: url(static/pokemon/newicons/46.png);">Paras - #46</option>
-		<option value="48" style="background-image: url(static/pokemon/newicons/48.png);">Venonat - #48</option>
-		<option value="50" style="background-image: url(static/pokemon/newicons/50.png);">Diglett - #50</option>
-		<option value="52" style="background-image: url(static/pokemon/newicons/52.png);">Meowth - #52</option>
-		<option value="54" style="background-image: url(static/pokemon/newicons/54.png);">Psyduck - #54</option>
-		<option value="56" style="background-image: url(static/pokemon/newicons/56.png);">Mankey - #56</option>
-		<option value="58" style="background-image: url(static/pokemon/newicons/58.png);">Growlithe - #58</option>
-		<option value="60" style="background-image: url(static/pokemon/newicons/60.png);">Poliwag - #60</option>
-		<option value="63" style="background-image: url(static/pokemon/newicons/63.png);">Abra - #63</option>
-		<option value="66" style="background-image: url(static/pokemon/newicons/66.png);">Machop - #66</option>
-		<option value="69" style="background-image: url(static/pokemon/newicons/69.png);">Bellsprout - #69</option>
-		<option value="72" style="background-image: url(static/pokemon/newicons/72.png);">Tentacool - #72</option>
-		<option value="74" style="background-image: url(static/pokemon/newicons/74.png);">Geodude - #74</option>
-		<option value="77" style="background-image: url(static/pokemon/newicons/77.png);">Ponyta - #77</option>
-		<option value="79" style="background-image: url(static/pokemon/newicons/79.png);">Slowpoke - #79</option>
-		<option value="81" style="background-image: url(static/pokemon/newicons/81.png);">Magnemite - #81</option>
-		<option value="84" style="background-image: url(static/pokemon/newicons/84.png);">Doduo - #84</option>
-		<option value="86" style="background-image: url(static/pokemon/newicons/86.png);">Seel - #86</option>
-		<option value="90" style="background-image: url(static/pokemon/newicons/90.png);">Shellder - #90</option>
-		<option value="92" style="background-image: url(static/pokemon/newicons/92.png);">Gastly - #92</option>
-		<option value="95" style="background-image: url(static/pokemon/newicons/95.png);">Onix - #95</option>
-		<option value="96" style="background-image: url(static/pokemon/newicons/96.png);">Drowzee - #96</option>
-		<option value="98" style="background-image: url(static/pokemon/newicons/98.png);">Krabby - #98</option>
-		<option value="100" style="background-image: url(static/pokemon/newicons/100.png);">Voltorb - #100</option>
-		<option value="102" style="background-image: url(static/pokemon/newicons/102.png);">Exeggcute - #102</option>
-		<option value="104" style="background-image: url(static/pokemon/newicons/104.png);">Cubone - #104</option>
-		<option value="111" style="background-image: url(static/pokemon/newicons/111.png);">Rhyhorn - #111</option>
-		<option value="116" style="background-image: url(static/pokemon/newicons/116.png);">Horsea - #116</option>
-		<option value="118" style="background-image: url(static/pokemon/newicons/118.png);">Goldeen - #118</option>
-		<option value="120" style="background-image: url(static/pokemon/newicons/120.png);">Staryu - #120</option>
-		<option value="123" style="background-image: url(static/pokemon/newicons/123.png);">Scyther - #123</option>
-		<option value="124" style="background-image: url(static/pokemon/newicons/124.png);">Jynx - #124</option>
-		<option value="125" style="background-image: url(static/pokemon/newicons/125.png);">Electabuzz - #125</option>
-		<option value="126" style="background-image: url(static/pokemon/newicons/126.png);">Magmar - #126</option>
-		<option value="127" style="background-image: url(static/pokemon/newicons/127.png);">Pinsir - #127</option>
-		<option value="129" style="background-image: url(static/pokemon/newicons/129.png);">Magikarp - #129</option>
-		<option value="133" style="background-image: url(static/pokemon/newicons/133.png);">Eevee - #133</option>
-		<option value="138" style="background-image: url(static/pokemon/newicons/138.png);">Omanyte - #138</option>
-		<option value="140" style="background-image: url(static/pokemon/newicons/140.png);">Kabuto - #140</option>
-	</select>
+	<div id="pkid" class="pkid" multiple="multiple" style="height:78vh;width:99%;">
+		<div value="1" style="background-image: url(static/pokemon/newicons/1.png);">Bulbasaur - #1</div>
+		<div value="4" style="background-image: url(static/pokemon/newicons/4.png);">Charmander - #4</div>
+		<div value="7" style="background-image: url(static/pokemon/newicons/7.png);">Squirtle - #7</div>
+		<div value="10" style="background-image: url(static/pokemon/newicons/10.png);">Caterpie - #10</div>
+		<div value="13" style="background-image: url(static/pokemon/newicons/13.png);">Weedle - #13</div>
+		<div value="23" style="background-image: url(static/pokemon/newicons/23.png);">Ekans - #23</div>
+		<div value="25" style="background-image: url(static/pokemon/newicons/25.png);">Pikachu - #25</div>
+		<div value="27" style="background-image: url(static/pokemon/newicons/27.png);">Sandshrew - #27</div>
+		<div value="29" style="background-image: url(static/pokemon/newicons/29.png);">Nidoran♀ - #29</div>
+		<div value="32" style="background-image: url(static/pokemon/newicons/32.png);">Nidoran♂ - #32</div>
+		<div value="35" style="background-image: url(static/pokemon/newicons/35.png);">Clefairy - #35</div>
+		<div value="37" style="background-image: url(static/pokemon/newicons/37.png);">Vulpix - #37</div>
+		<div value="39" style="background-image: url(static/pokemon/newicons/39.png);">Jigglypuff - #39</div>
+		<div value="41" style="background-image: url(static/pokemon/newicons/41.png);">Zubat - #41</div>
+		<div value="43" style="background-image: url(static/pokemon/newicons/43.png);">Oddish - #43</div>
+		<div value="46" style="background-image: url(static/pokemon/newicons/46.png);">Paras - #46</div>
+		<div value="48" style="background-image: url(static/pokemon/newicons/48.png);">Venonat - #48</div>
+		<div value="50" style="background-image: url(static/pokemon/newicons/50.png);">Diglett - #50</div>
+		<div value="52" style="background-image: url(static/pokemon/newicons/52.png);">Meowth - #52</div>
+		<div value="54" style="background-image: url(static/pokemon/newicons/54.png);">Psyduck - #54</div>
+		<div value="56" style="background-image: url(static/pokemon/newicons/56.png);">Mankey - #56</div>
+		<div value="58" style="background-image: url(static/pokemon/newicons/58.png);">Growlithe - #58</div>
+		<div value="60" style="background-image: url(static/pokemon/newicons/60.png);">Poliwag - #60</div>
+		<div value="63" style="background-image: url(static/pokemon/newicons/63.png);">Abra - #63</div>
+		<div value="66" style="background-image: url(static/pokemon/newicons/66.png);">Machop - #66</div>
+		<div value="69" style="background-image: url(static/pokemon/newicons/69.png);">Bellsprout - #69</div>
+		<div value="72" style="background-image: url(static/pokemon/newicons/72.png);">Tentacool - #72</div>
+		<div value="74" style="background-image: url(static/pokemon/newicons/74.png);">Geodude - #74</div>
+		<div value="77" style="background-image: url(static/pokemon/newicons/77.png);">Ponyta - #77</div>
+		<div value="79" style="background-image: url(static/pokemon/newicons/79.png);">Slowpoke - #79</div>
+		<div value="81" style="background-image: url(static/pokemon/newicons/81.png);">Magnemite - #81</div>
+		<div value="84" style="background-image: url(static/pokemon/newicons/84.png);">Doduo - #84</div>
+		<div value="86" style="background-image: url(static/pokemon/newicons/86.png);">Seel - #86</div>
+		<div value="90" style="background-image: url(static/pokemon/newicons/90.png);">Shellder - #90</div>
+		<div value="92" style="background-image: url(static/pokemon/newicons/92.png);">Gastly - #92</div>
+		<div value="95" style="background-image: url(static/pokemon/newicons/95.png);">Onix - #95</div>
+		<div value="96" style="background-image: url(static/pokemon/newicons/96.png);">Drowzee - #96</div>
+		<div value="98" style="background-image: url(static/pokemon/newicons/98.png);">Krabby - #98</div>
+		<div value="100" style="background-image: url(static/pokemon/newicons/100.png);">Voltorb - #100</div>
+		<div value="102" style="background-image: url(static/pokemon/newicons/102.png);">Exeggcute - #102</div>
+		<div value="104" style="background-image: url(static/pokemon/newicons/104.png);">Cubone - #104</div>
+		<div value="111" style="background-image: url(static/pokemon/newicons/111.png);">Rhyhorn - #111</div>
+		<div value="116" style="background-image: url(static/pokemon/newicons/116.png);">Horsea - #116</div>
+		<div value="118" style="background-image: url(static/pokemon/newicons/118.png);">Goldeen - #118</div>
+		<div value="120" style="background-image: url(static/pokemon/newicons/120.png);">Staryu - #120</div>
+		<div value="123" style="background-image: url(static/pokemon/newicons/123.png);">Scyther - #123</div>
+		<div value="124" style="background-image: url(static/pokemon/newicons/124.png);">Jynx - #124</div>
+		<div value="125" style="background-image: url(static/pokemon/newicons/125.png);">Electabuzz - #125</div>
+		<div value="126" style="background-image: url(static/pokemon/newicons/126.png);">Magmar - #126</div>
+		<div value="127" style="background-image: url(static/pokemon/newicons/127.png);">Pinsir - #127</div>
+		<div value="129" style="background-image: url(static/pokemon/newicons/129.png);">Magikarp - #129</div>
+		<div value="133" style="background-image: url(static/pokemon/newicons/133.png);">Eevee - #133</div>
+		<div value="138" style="background-image: url(static/pokemon/newicons/138.png);">Omanyte - #138</div>
+		<div value="140" style="background-image: url(static/pokemon/newicons/140.png);">Kabuto - #140</div>
+	</div>
 	</div>
 	<body>
     <div class="popup" style="position:absolute;top:0px;left:0px;width:100%;height:100%;overflow:hidden;background:rgba(0,0,0,0.4);z-index:20;">
@@ -202,10 +221,12 @@
 				<tr>
 					<td>2) Select the distance. Smaller values will load faster!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					<td>The time displayed is the minutes on the hour they <b><i>dis</i></b>appear!</td>
+					<td>Help us add your area! For info how, see <a href=../contribute.html> here</a></td>
 				</tr>
 				<tr>
 					<td>3) Click "Filter"!</td>
 					<td></td>
+					<td>Return <a href=../home.html>home</a></td>
 					<td></td>
 				</tr>
 			</tbody>
@@ -308,7 +329,14 @@
 			dataMarkers = [];
             var locationcount = {};
 			//TODO Should only load this once, instead of every time...
-			var pkid = $('select#pkid').val();
+			/* var pkid = $('select#pkid').val(); */
+			var pkid = (function(){
+                var val = [];
+                $('#pkid').children().each(function(i, e){
+                    e.className && val.push(e.getAttribute('value'));
+                });
+                return val;
+            })();
 			var c = map.getCenter();
 			var pklat = c.lat();
 			var pklon = c.lng();
@@ -407,13 +435,16 @@
 		</script>
 		<script defer src="https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js"></script>
 		<script>
-$("select#pkid").mousedown(function(e){
+/* $("select#pkid").mousedown(function(e){ */
+$("#pkid").mousedown(function(e){
     e.preventDefault();
 
     var select = this;
     var scroll = select .scrollTop;
 
-    e.target.selected = !e.target.selected;
+    /* e.target.selected = !e.target.selected; */
+    /* e.target.toggleClass('pokemon-selected'); */
+    e.target.className !== 'pkid' && (e.target.className = e.target.className ? '' : 'pokemon-selected');
 
     setTimeout(function(){select.scrollTop = scroll;}, 0);
 
@@ -421,10 +452,14 @@ $("select#pkid").mousedown(function(e){
 }).mousemove(function(e){e.preventDefault()});
 
 $('#allselect').click(function() {
-    $('#pkid option').prop('selected', true);
+    /* $('#pkid option').prop('selected', true); */
+    /* $('#pkid div').toggleClass('pokemon-selected', true); */
+    $('#pkid').children().each(function(i, e){e.className='pokemon-selected'});
 });
 $('#noneselect').click(function() {
-    $('#pkid option').prop('selected', false);
+    /* $('#pkid option').prop('selected', false); */
+    /* $('#pkid div').toggleClass('pokemon-selected', false); */
+    $('#pkid').children().each(function(i, e){e.className=''});
 });
 $('#closeBtn').click(function() {
     $('.popup').hide();
