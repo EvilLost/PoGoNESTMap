@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>US PoGo NESTMap</title>
+		<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		#map {
+			height: 100%;
+		}
+		#floating-panel {
+	 		position: absolute;
+			top: 10px;
+			left: 25%;
+			z-index: 5;
+			background-color: #fff;
+			padding: 5px;
+			border: 1px solid #999;
+			text-align: center;
+			font-family: 'Roboto','sans-serif';
+			line-height: 30px;
+			padding-left: 10px;
+		}
+		#floating-panel {
+			background-color: #fff;
+			border: 1px solid #999;
+			left: 25%;
+			padding: 5px;
+			position: absolute;
+			top: 10px;
+			z-index: 5;
+		}
+		.labels {
+			color: white;
+			background-color: DimGrey;
+			font-family: "Lucida Grande", "Arial", sans-serif;
+			font-size: 10px;
+			text-align: center;
+			width: 30px;
+			white-space: nowrap;
+			border-radius: 2px;
+		}
+		.pkid option  {
+		    padding-left: 40px;
+			margin-top: 0px;
+			background-size: 40px 40px;
+			background-repeat: no-repeat;
+			height: 20px;
+			padding-top: 10px;
+		}
+		.sammich {
+		  padding-left: 2em;
+		  position: relative;
+		}
+		.sammich:before {
+		  content: "";
+		  position: absolute;
+		  left: 0;
+		  top: 0.21em;
+		  bottom: 0.21em;
+		  width: 1em;
+		  background: linear-gradient(
+			to bottom, 
+			black, black 20%, 
+			transparent 20%, transparent 40%, 
+			black 40%, black 60%, 
+			transparent 60%, transparent 80%, 
+			black 80%, black 100%
+		  );
+		}
+		#filter {
+			background: green;
+			border: none;
+			box-shadow: none;
+			padding: 1vh;
+			color: white;
+			font-weight: 900;
+		}
+		#allselect {
+			background: blue;
+			border: none;
+			box-shadow: none;
+			padding: 0.5vh;
+			color: white;
+			font-weight: 900;
+		}
+		#noneselect {
+			background: red;
+			border: none;
+			box-shadow: none;
+			padding: 0.5vh;
+			color: white;
+			font-weight: 900;
+		}
+		#pkdistance {
+			border: none;
+			box-shadow: none;
+			padding: 1vh;
+			color: white;
+			font-weight: 900;
+			background-color: slategray;
+			background-size:75px 100px;
+		}
+		#iconSizing{
+			
+		}
+	 	</style>
+	</head>
+<script src="https://code.jquery.com/jquery-1.7.2.js"></script>
+<div style="position:absolute;top:15px;right:50px;z-index:10;width:20%;">
+	<input id="filter" type="button" value="Filter" onclick="removeRectangle();updateHeatMap();" style="width:99%;"/>
+	<select id="pkdistance" style="width:99%;">
+		<option value="0.01">Tiny (best performance)</option>
+		<option value="0.03">Extra Small Area (for mobile users)</option>
+		<option value="0.1">Small Area</option>
+		<option value="0.25">Medium Area</option>
+		<option value="1">Large Area (Causes lag!)</option>
+	</select>
+	<div style="background: white;padding: 10px;width:89%;">Icon Size: 
+		<input id="iconSizing" type="range" name="iconSizing" min="40" max="96" step="40,60,96" style="width:50%;float:right;">
+	</div>
+	<input id="allselect" type="button" value="All" style="width:48.4%;"/>
+	<input id="noneselect" type="button" value="None" style="width:48.4%;"/>
+	<select id="pkid" class="pkid" multiple="multiple" style="height:78vh;width:99%;">
+		<option value="1" style="background-image: url(static/pokemon/newicons/1.png);">Bulbasaur - #1</option>
+		<option value="4" style="background-image: url(static/pokemon/newicons/4.png);">Charmander - #4</option>
+		<option value="7" style="background-image: url(static/pokemon/newicons/7.png);">Squirtle - #7</option>
+		<option value="10" style="background-image: url(static/pokemon/newicons/10.png);">Caterpie - #10</option>
+		<option value="13" style="background-image: url(static/pokemon/newicons/13.png);">Weedle - #13</option>
+		<option value="23" style="background-image: url(static/pokemon/newicons/23.png);">Ekans - #23</option>
+		<option value="25" style="background-image: url(static/pokemon/newicons/25.png);">Pikachu - #25</option>
+		<option value="27" style="background-image: url(static/pokemon/newicons/27.png);">Sandshrew - #27</option>
+		<option value="29" style="background-image: url(static/pokemon/newicons/29.png);">Nidoran♀ - #29</option>
+		<option value="32" style="background-image: url(static/pokemon/newicons/32.png);">Nidoran♂ - #32</option>
+		<option value="35" style="background-image: url(static/pokemon/newicons/35.png);">Clefairy - #35</option>
+		<option value="37" style="background-image: url(static/pokemon/newicons/37.png);">Vulpix - #37</option>
+		<option value="39" style="background-image: url(static/pokemon/newicons/39.png);">Jigglypuff - #39</option>
+		<option value="41" style="background-image: url(static/pokemon/newicons/41.png);">Zubat - #41</option>
+		<option value="43" style="background-image: url(static/pokemon/newicons/43.png);">Oddish - #43</option>
+		<option value="46" style="background-image: url(static/pokemon/newicons/46.png);">Paras - #46</option>
+		<option value="48" style="background-image: url(static/pokemon/newicons/48.png);">Venonat - #48</option>
+		<option value="50" style="background-image: url(static/pokemon/newicons/50.png);">Diglett - #50</option>
+		<option value="52" style="background-image: url(static/pokemon/newicons/52.png);">Meowth - #52</option>
+		<option value="54" style="background-image: url(static/pokemon/newicons/54.png);">Psyduck - #54</option>
+		<option value="56" style="background-image: url(static/pokemon/newicons/56.png);">Mankey - #56</option>
+		<option value="58" style="background-image: url(static/pokemon/newicons/58.png);">Growlithe - #58</option>
+		<option value="60" style="background-image: url(static/pokemon/newicons/60.png);">Poliwag - #60</option>
+		<option value="63" style="background-image: url(static/pokemon/newicons/63.png);">Abra - #63</option>
+		<option value="66" style="background-image: url(static/pokemon/newicons/66.png);">Machop - #66</option>
+		<option value="69" style="background-image: url(static/pokemon/newicons/69.png);">Bellsprout - #69</option>
+		<option value="72" style="background-image: url(static/pokemon/newicons/72.png);">Tentacool - #72</option>
+		<option value="74" style="background-image: url(static/pokemon/newicons/74.png);">Geodude - #74</option>
+		<option value="77" style="background-image: url(static/pokemon/newicons/77.png);">Ponyta - #77</option>
+		<option value="79" style="background-image: url(static/pokemon/newicons/79.png);">Slowpoke - #79</option>
+		<option value="81" style="background-image: url(static/pokemon/newicons/81.png);">Magnemite - #81</option>
+		<option value="84" style="background-image: url(static/pokemon/newicons/84.png);">Doduo - #84</option>
+		<option value="86" style="background-image: url(static/pokemon/newicons/86.png);">Seel - #86</option>
+		<option value="90" style="background-image: url(static/pokemon/newicons/90.png);">Shellder - #90</option>
+		<option value="92" style="background-image: url(static/pokemon/newicons/92.png);">Gastly - #92</option>
+		<option value="95" style="background-image: url(static/pokemon/newicons/95.png);">Onix - #95</option>
+		<option value="96" style="background-image: url(static/pokemon/newicons/96.png);">Drowzee - #96</option>
+		<option value="98" style="background-image: url(static/pokemon/newicons/98.png);">Krabby - #98</option>
+		<option value="100" style="background-image: url(static/pokemon/newicons/100.png);">Voltorb - #100</option>
+		<option value="102" style="background-image: url(static/pokemon/newicons/102.png);">Exeggcute - #102</option>
+		<option value="104" style="background-image: url(static/pokemon/newicons/104.png);">Cubone - #104</option>
+		<option value="111" style="background-image: url(static/pokemon/newicons/111.png);">Rhyhorn - #111</option>
+		<option value="116" style="background-image: url(static/pokemon/newicons/116.png);">Horsea - #116</option>
+		<option value="118" style="background-image: url(static/pokemon/newicons/118.png);">Goldeen - #118</option>
+		<option value="120" style="background-image: url(static/pokemon/newicons/120.png);">Staryu - #120</option>
+		<option value="123" style="background-image: url(static/pokemon/newicons/123.png);">Scyther - #123</option>
+		<option value="124" style="background-image: url(static/pokemon/newicons/124.png);">Jynx - #124</option>
+		<option value="125" style="background-image: url(static/pokemon/newicons/125.png);">Electabuzz - #125</option>
+		<option value="126" style="background-image: url(static/pokemon/newicons/126.png);">Magmar - #126</option>
+		<option value="127" style="background-image: url(static/pokemon/newicons/127.png);">Pinsir - #127</option>
+		<option value="129" style="background-image: url(static/pokemon/newicons/129.png);">Magikarp - #129</option>
+		<option value="133" style="background-image: url(static/pokemon/newicons/133.png);">Eevee - #133</option>
+		<option value="138" style="background-image: url(static/pokemon/newicons/138.png);">Omanyte - #138</option>
+		<option value="140" style="background-image: url(static/pokemon/newicons/140.png);">Kabuto - #140</option>
+	</select>
+	</div>
+	<body>
+    <div class="popup" style="position:absolute;top:0px;left:0px;width:100%;height:100%;overflow:hidden;background:rgba(0,0,0,0.4);z-index:20;">
+		<div class="content" style="background:white;border-radius:25px;width:50vw;height:50vh;margin-left:25vw;margin-top:25vh;padding:25px;">
+			<table>
+			<thead>
+				<tr>
+					<th align=left><h2><b><u>HOW TO USE:</b></u></h2></th>
+					<th><h2><a href=USAnestmap.html>Nest Migration 3</a> was:<u><br> <b> September 26, 2016.</b></u></h2></th>
+					<th align=right>[NOTICE: CURRENTLY VIEWING MIGRATION 2!]</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1) Select one or more specie(s) you wish to find. <br>(BLUE means selected!)</td>
+					<td>Remember! This is a mapping of nest spawn points. It is <i><u>not</u></i> a live map!</td>
+					<td>Each displayed point has a <b>20%</b> chance to spawn. They won't always be there!</td>
+				</tr>
+				<tr>
+					<td>2) Select the distance. Smaller values will load faster!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					<td>The time displayed is the minutes on the hour they <b><i>dis</i></b>appear!</td>
+					<td>Help us add your area! For info how, see <a href=../contribute.html> here</a></td>
+				</tr>
+				<tr>
+					<td>3) Click "Filter"!</td>
+					<td></td>
+					<td>Return <a href=../home.html>home</a></td>
+					<td></td>
+				</tr>
+			</tbody>
+			</table>
+			<input id="closeBtn" type="button" value="Close" style="width:99%;"/>
+		</div>
+	</div>
+	<div class="sammich-overlay" style="position:absolute;top:10px;left:10px;z-index:30;background: white;padding: 10px;border-radius: 10px;display:none;">
+		<a id="instructions"><div class="sammich">
+		Instructions
+		</div></a>
+	</div>
+		<div id="map"></div>
+		<script>
+        var rectangle;
+		function getFile(path, asynch, callback) {
+			var xhr = new XMLHttpRequest();
+			xhr.overrideMimeType("application/json");
+			xhr.open("GET", path, asynch);
+			xhr.onload = function (e) {
+				if (xhr.readyState === 4) {
+					callback(xhr.responseText);
+				}
+			};
+			xhr.onerror = function (e) {
+				console.error(xhr.status);
+			};
+			xhr.send(null);
+		}
+		var map, heatmap;
+		var dataPoints = [];
+		var dataMarkers = [];
+		var pokemonData = null;
+		var showingMarkers = true;
+		var pokeJSON;
+				
+		function initMap() {
+			
+			map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 11,
+				center: {lat: 33.678399, lng: -117.771254},
+				mapTypeControl: false,
+				streetViewControl: false,
+			});
+			
+			//TODO Not thread safe.
+			getFile('./static/pokemons.json', true, function(response) {
+				pokemonData = JSON.parse(response).pokemon;
+			});
+			
+			updateHeatMap();
+				
+			console.log("Finished initMap()")
+		}
+		function toggleHeatmap() {
+			heatmap.setMap(heatmap.getMap() ? null : map);
+		}
+		function changeGradient() {
+			var gradient = [
+				'rgba(0, 255, 255, 0)',
+				'rgba(0, 255, 255, 1)',
+				'rgba(0, 191, 255, 1)',
+				'rgba(0, 127, 255, 1)',
+				'rgba(0, 63, 255, 1)',
+				'rgba(0, 0, 255, 1)',
+				'rgba(0, 0, 223, 1)',
+				'rgba(0, 0, 191, 1)',
+				'rgba(0, 0, 159, 1)',
+				'rgba(0, 0, 127, 1)',
+				'rgba(63, 0, 91, 1)',
+				'rgba(127, 0, 63, 1)',
+				'rgba(191, 0, 31, 1)',
+				'rgba(255, 0, 0, 1)'
+			]
+			heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+		}
+		function changeRadius() {
+			heatmap.set('radius', heatmap.get('radius') ? null : 20);
+		}
+		function changeOpacity() {
+			heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+		}
+		
+		function toggleMarkers() {
+			console.log("Toggle Markers")
+			for (var i = 0; i < dataMarkers.length; i++) {
+				dataMarkers[i].setMap(showingMarkers ? null : map);
+			}
+			
+			showingMarkers = showingMarkers ? false : true;
+		}
+		function updatePoints(callback) {
+			dataPoints = [];
+			
+			//If the markers are showing, remove from map before deleting.
+			var wereMarkersShowing = showingMarkers;
+			if (showingMarkers==true) {
+				toggleMarkers();
+			}
+			dataMarkers = [];
+            var locationcount = {};
+			//TODO Should only load this once, instead of every time...
+			var pkid = $('select#pkid').val();
+			var c = map.getCenter();
+			var pklat = c.lat();
+			var pklon = c.lng();
+			var pkdistance = $('select#pkdistance').val();
+			rectangle = new google.maps.Rectangle();
+			rectangle.setOptions({
+				strokeColor: '#FF0000',
+				strokeOpacity: 0.8,
+				strokeWeight: 2,
+				fillColor: '#FF0000',
+				fillOpacity: 0.0,
+				map: map,
+				bounds: {
+				  north: pklat - 0.85*pkdistance,
+				  south: pklat + 0.85*pkdistance,
+				  east: pklon + 1*pkdistance,
+				  west: pklon - 1*pkdistance
+				}
+			});
+			rectangle.setMap(map);
+			if (pkid != null && c != null) {
+				var file = './work.php?pid='+pkid+'&lat='+pklat+'&lon='+pklon+'&dist='+pkdistance;
+			} else if(pkid != null) {
+				var file = './work.php?pid='+pkid;
+			} else {
+				var file = './work.php?pid=nothing';
+			}
+			getFile(file, true, function(response) {
+				
+				if (true) {
+					pokeJSON = JSON.parse(response);
+					console.log(pokeJSON.length + " pokemon loaded");
+				}
+				var iconSizing = $('input#iconSizing').val();
+				for (var i=0; i<pokeJSON.length; i++) {
+					var p = pokeJSON[i];
+					var thisTargetIcon = {url: './static/pokemon/newicons/' + p.pokemon_id + '.png' ,size: new google.maps.Size(96, 96),scaledSize: new google.maps.Size(iconSizing, iconSizing),anchor: new google.maps.Point(iconSizing/2, iconSizing/2)};
+	
+                    var pos = new google.maps.LatLng(p.latitude,p.longitude);
+                    dataPoints.push(pos);
+					var spawntime = p.spawntime;
+					var rawspawntime = new Date(p.disappear_time);
+					var spawnmin =  "0" + rawspawntime.getMinutes();
+					spawntime = 'XX:' + spawnmin.substr(-2);
+                    createMarker(pos, thisTargetIcon, spawntime);						
+                
+				}
+				
+				//Restore showing markers
+				if (wereMarkersShowing==true) {
+					toggleMarkers();
+				}
+				
+				callback(dataPoints);
+			});
+	
+			
+		}
+		
+		function createMarker(pos, targetIcon, spawntime) {
+					
+			var marker = new MarkerWithLabel({
+				position: pos,
+				icon: targetIcon,
+				labelContent: spawntime,
+				labelAnchor: new google.maps.Point(11, 30),
+				labelClass: "labels",
+				zindex: 999999
+			});
+			
+			marker.addListener('click', function () { markerInfo.open(map, marker); });
+			
+			dataMarkers.push(marker);
+		}
+		
+		function updateHeatMap() {
+			updatePoints(function (theseDataPoints) { 
+								
+				console.log("Updating HeatMapLayer")
+				if (heatmap) {
+					heatmap.setMap(null);
+				}
+			
+				heatmap = new google.maps.visualization.HeatmapLayer({
+					data: theseDataPoints,
+					map: map
+				});
+			});
+		}
+		function removeRectangle() {
+			rectangle.setMap(null);    
+		}	
+		</script>
+		<script
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFwcovP7MrwKLTWq2wTzwSn4DJR8Ls5DQ&libraries=visualization&callback=initMap">
+		</script>
+		<script defer src="https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js"></script>
+		<script>
+$("select#pkid").mousedown(function(e){
+    e.preventDefault();
+
+    var select = this;
+    var scroll = select .scrollTop;
+
+    e.target.selected = !e.target.selected;
+
+    setTimeout(function(){select.scrollTop = scroll;}, 0);
+
+    $(select ).focus();
+}).mousemove(function(e){e.preventDefault()});
+
+$('#allselect').click(function() {
+    $('#pkid option').prop('selected', true);
+});
+$('#noneselect').click(function() {
+    $('#pkid option').prop('selected', false);
+});
+$('#closeBtn').click(function() {
+    $('.popup').hide();
+	$('.sammich-overlay').show();
+});
+$('#instructions').click(function() {
+    $('.popup').show();
+	$('.sammich-overlay').hide();
+});
+</script>
+	</body>
+</html>
